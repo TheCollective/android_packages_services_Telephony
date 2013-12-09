@@ -91,6 +91,7 @@
     <uses-permission android:name="android.permission.MANAGE_USERS" />
     <uses-permission android:name="android.permission.UPDATE_APP_OPS_STATS" />
     <uses-permission android:name="android.permission.CONNECTIVITY_INTERNAL" />
+    <uses-permission android:name="android.permission.SET_PREFERRED_APPLICATIONS" />
 
     <!-- This tells the activity manager to not delay any of our activity
          start requests, even if they happen immediately after the user
@@ -490,7 +491,8 @@
         <activity android:name=".SipCallOptionHandler"
                 android:theme="@style/SipCallOptionHandlerTheme"
                 android:screenOrientation="nosensor"
-                android:configChanges="orientation|screenSize|keyboardHidden">
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:excludeFromRecents="true">
         </activity>
 
         <activity android:name="RespondViaSmsManager$Settings"
@@ -508,6 +510,14 @@
                 android:launchMode="singleInstance"
                 android:theme="@style/Empty">
         </activity>
+
+        <activity android:name="MMIDialogActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:excludeFromRecents="true"
+                android:launchMode="singleInstance"
+                android:theme="@style/Empty">
+        </activity>
+
         <activity android:name=".TextMessagePackageChooser"
                 android:label="@string/respond_via_sms_setting_title"
                 android:configChanges="orientation|screenSize|keyboardHidden"
@@ -536,8 +546,21 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".PhoneToggler" android:permission="com.android.phone.CHANGE_NETWORK_MODE">
+            <intent-filter>
+                <action android:name="com.android.internal.telephony.REQUEST_NETWORK_MODE" />
+                <action android:name="com.android.internal.telephony.MODIFY_NETWORK_MODE" />
+            </intent-filter>
+        </receiver>
+
         <!-- service to dump telephony information -->
         <service android:name="HfaService" android:exported="false"/>
 
     </application>
+
+    <permission android:name="com.android.phone.CHANGE_NETWORK_MODE"
+        android:label="@string/perm_change_mobile_network"
+        android:description="@string/perm_change_mobile_network_desc"
+        android:permissionGroup="android.permission-group.COST_MONEY"
+        android:protectionLevel="dangerous" />
 </manifest>
